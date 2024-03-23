@@ -1,12 +1,21 @@
 import React from 'react'
 import Banner from '../components/Banner'
+import CoinsTable from '../components/CoinsTable'
+import { ThemeProvider, createTheme } from '@mui/material';
+
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 
 const HomePage = () => {
     return (
         <>
-            <div style={{ fontFamily: "Montserrat" }} >
+            <ThemeProvider theme={darkTheme} >
                 <Banner />
-            </div>
+                <CoinsTable />
+            </ThemeProvider>
         </>
     )
 }
