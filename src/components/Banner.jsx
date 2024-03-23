@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-// import HeroBG from "../assets/HeroBG.gif"
+import HeroBG from "../assets/HeroBG.jpg"
 import { styled } from "@mui/system"
 // import Slider from "react-slick";
 import axios from 'axios'
@@ -8,10 +8,11 @@ import numberWithCommas from '../config/numberFix'
 import { Link } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';       // use this in main.jsx if want to use alice throughout the code
+import { useSelector } from 'react-redux'
 
 const BannerDiv = styled('div')({
     height: 400,
-    background: `url(https://wallpapers.com/images/hd/cryptocurrency-ethereum-art-ojd0r7g0szz1eob8.jpg) no-repeat center center / cover`,
+    background: `url(${HeroBG}) no-repeat center center / cover`,
     display: "flex",
     justifyContent: "end",
     alignItems: "center",
@@ -44,13 +45,12 @@ const CoinDiv = styled('div')({
 const Banner = () => {
 
     const [trending, setTrending] = useState([])
+    const { currency, symbol } = useSelector(state => state.cryptoReducer)
 
     const getTrendingCoins = async () => {
-        const { data } = await axios.get(TrendingCoins("inr"))
+        const { data } = await axios.get(TrendingCoins(currency))
         setTrending(data)
     }
-
-    console.log(trending);
 
     const responsive = {        //responsivess of carousel
         0: {
@@ -63,7 +63,7 @@ const Banner = () => {
 
     useEffect(() => {
         getTrendingCoins()
-    }, [])
+    }, [currency])
 
     // carousel items
     const items = trending.map(coin => {
@@ -79,7 +79,7 @@ const Banner = () => {
                     </span>
                 </h4>
 
-                <h3> $ {numberWithCommas(coin.current_price.toFixed(2))} </h3>
+                <h3> {symbol} {numberWithCommas(coin.current_price.toFixed(2))} </h3>
 
             </CoinDiv>
         </Link>

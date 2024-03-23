@@ -11,6 +11,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path='/' element={<HomePage />} />
+          <Route path='/coins/:id' element={<h1>Coin Details</h1>} />
           <Route path='*' element={<div><h1>Page not found</h1></div>} />
         </Routes>
       </Router>
