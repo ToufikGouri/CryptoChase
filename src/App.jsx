@@ -2,6 +2,7 @@ import './App.css'
 import NavBar from './components/NavBar'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import HomePage from './pages/HomePage'
+import CoinPage from './pages/CoinPage'
 
 function App() {
 
@@ -11,7 +12,7 @@ function App() {
         <NavBar />
         <Routes>
           <Route path='/' element={<HomePage />} />
-          <Route path='/coins/:id' element={<h1>Coin Details</h1>} />
+          <Route path='/coins/:id' element={<CoinPage/>} />
           <Route path='*' element={<div><h1>Page not found</h1></div>} />
         </Routes>
       </Router>
