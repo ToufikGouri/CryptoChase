@@ -46,6 +46,12 @@ const MarketData = styled('div')({
 const InfoContainer = styled('div')({
     border: "2px solid red",
     width: "70%",
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: 25,
+    padding: 40
 })
 
 const CoinPage = () => {
@@ -59,7 +65,7 @@ const CoinPage = () => {
         setcoin(data)
     }
 
-    console.log(coin);
+    console.log(coin);      // remove this
 
     useEffect(() => {
         getCoin()
@@ -67,59 +73,64 @@ const CoinPage = () => {
 
     return (
         <>
-            <div style={{ display: "flex" }}>
+            {!coin ?
+                (<h1>Loading COIN PAGE...</h1>) :
+                (
+                    <div style={{ display: "flex" }}>
 
-                {/* SIDEBAR */}
-                {coin && <SideBar>
-                    <img src={coin.image.large} alt={coin.name} height={200} style={{ marginBottom: 20 }} />
-                    <Heading variant='h3'>{coin.name}</Heading>
-                    <Description>
-                        {HTMLReactParser(String(coin.description.en.split(". ")[0]))}.
-                    </Description>
+                        {/* SIDEBAR */}
+                        {coin && <SideBar>
+                            <img src={coin.image.large} alt={coin.name} height={200} style={{ marginBottom: 20 }} />
+                            <Heading variant='h3'>{coin.name}</Heading>
+                            <Description>
+                                {HTMLReactParser(String(coin.description.en.split(". ")[0]))}.
+                            </Description>
 
-                    <MarketData >
-                        <span style={{ display: "flex" }} >
-                            <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
-                                Rank:
-                            </Typography>
-                            &nbsp; &nbsp;
-                            <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
-                                {coin.market_cap_rank}
-                            </Typography>
-                        </span>
+                            <MarketData >
+                                <span style={{ display: "flex" }} >
+                                    <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
+                                        Rank:
+                                    </Typography>
+                                    &nbsp; &nbsp;
+                                    <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
+                                        {coin.market_cap_rank}
+                                    </Typography>
+                                </span>
 
-                        <span style={{ display: "flex" }} >
-                            <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
-                                Current Price:
-                            </Typography>
-                            &nbsp; &nbsp;
-                            <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
-                                {symbol}{" "} {numberWithCommas(coin.market_data.current_price[currency.toLowerCase()])}
-                            </Typography>
-                        </span>
+                                <span style={{ display: "flex" }} >
+                                    <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
+                                        Current Price:
+                                    </Typography>
+                                    &nbsp; &nbsp;
+                                    <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
+                                        {symbol}{" "} {numberWithCommas(coin.market_data.current_price[currency.toLowerCase()])}
+                                    </Typography>
+                                </span>
 
-                        <span style={{ display: "flex" }} >
-                            <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
-                                Market Cap:
-                            </Typography>
-                            &nbsp; &nbsp;
-                            <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
-                                {symbol} {" "} {numberWithCommas(coin.market_data.market_cap[currency.toLowerCase()].toString().slice(0, -6))}M
-                            </Typography>
-                        </span>
+                                <span style={{ display: "flex" }} >
+                                    <Typography variant='h5' style={{ fontWeight: "bold", fontFamily: "Montserrat", marginBottom: 20 }} >
+                                        Market Cap:
+                                    </Typography>
+                                    &nbsp; &nbsp;
+                                    <Typography variant='h5' style={{ fontFamily: "Montserrat" }} >
+                                        {symbol} {" "} {numberWithCommas(coin.market_data.market_cap[currency.toLowerCase()].toString().slice(0, -6))}M
+                                    </Typography>
+                                </span>
 
-                    </MarketData>
+                            </MarketData>
 
-                </SideBar>}
-
-
+                        </SideBar>}
 
 
-                {/* COIN INFO */}
-                <InfoContainer>
-                    <CoinInfo coin={coin} />
-                </InfoContainer>
-            </div>
+
+
+                        {/* COIN INFO */}
+                        <InfoContainer>
+                            <CoinInfo coin={coin} />
+                        </InfoContainer>
+                    </div>
+                )
+            }
         </>
     )
 }
