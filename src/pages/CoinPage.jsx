@@ -43,15 +43,14 @@ const MarketData = styled('div')({
 
 
 
-const InfoContainer = styled('div')({
-    border: "2px solid red",
+const InfoContainer = styled('div')({   
     width: "70%",
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
     marginTop: 25,
-    padding: 40
+    padding: 40,
 })
 
 const CoinPage = () => {
@@ -63,9 +62,7 @@ const CoinPage = () => {
     const getCoin = async () => {
         const { data } = await axios.get(SingleCoin(id))
         setcoin(data)
-    }
-
-    console.log(coin);      // remove this
+    } 
 
     useEffect(() => {
         getCoin()
