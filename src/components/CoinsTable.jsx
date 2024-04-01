@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import { LinearProgress, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/system'
 import axios from 'axios'
 import { CoinList } from '../config/api'
@@ -45,12 +45,16 @@ const CoinsTable = () => {
     const handleSearch = () => {
         return coins.filter(coin =>
             coin.name.toLowerCase().includes(search) ||
-            coin.symbol.toLowerCase().includes(search)) 
+            coin.symbol.toLowerCase().includes(search))
     }
 
     useEffect(() => {
         getCoins()
     }, [])
+
+    if (coins.length === 0) {
+        return <LinearProgress style={{ backgroundColor: "gold" }} />
+    }
 
     return (
         <>

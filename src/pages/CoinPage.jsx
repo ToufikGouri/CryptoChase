@@ -5,7 +5,7 @@ import { SingleCoin } from '../config/api'
 import { useSelector } from 'react-redux'
 import CoinInfo from '../components/CoinInfo'
 import { styled } from '@mui/system'
-import { Typography } from '@mui/material'
+import { LinearProgress, Typography } from '@mui/material'
 import HTMLReactParser from 'html-react-parser'
 import numberWithCommas from '../config/numberFix'
 
@@ -43,7 +43,7 @@ const MarketData = styled('div')({
 
 
 
-const InfoContainer = styled('div')({   
+const InfoContainer = styled('div')({
     width: "70%",
     display: 'flex',
     justifyContent: 'center',
@@ -62,7 +62,7 @@ const CoinPage = () => {
     const getCoin = async () => {
         const { data } = await axios.get(SingleCoin(id))
         setcoin(data)
-    } 
+    }
 
     useEffect(() => {
         getCoin()
@@ -71,7 +71,7 @@ const CoinPage = () => {
     return (
         <>
             {!coin ?
-                (<h1>Loading COIN PAGE...</h1>) :
+                (<LinearProgress style={{ backgroundColor: "gold" }} />) :
                 (
                     <div style={{ display: "flex" }}>
 

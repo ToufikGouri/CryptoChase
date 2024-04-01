@@ -8,6 +8,7 @@ import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend, Ca
 import { chartDays } from '../config/daysData'
 import ChartBtn from './ChartBtn'
 import numberWithCommas from '../config/numberFix'
+import { CircularProgress } from '@mui/material'
 
 const MainContainer = styled('div')({
     height: "100%",
@@ -37,6 +38,10 @@ const CoinInfo = ({ coin }) => {
         getHistoricalData()
     }, [currency, days])
 
+    if (!coinInfo.length === 0) {
+        return <CircularProgress style={{ color: "gold" }} size={250} thickness={1} />
+    }
+
 
     // ReChart Configuration 
     // CustomTooltip 
@@ -49,7 +54,7 @@ const CoinInfo = ({ coin }) => {
                 (<h1>Loading...</h1>) :
 
                 (<MainContainer>
-                    <ResponsiveContainer width="100%" height="100%" aspect={3}  >  {/* aspect={2.1}  */}  
+                    <ResponsiveContainer width="100%" height="100%" aspect={3}  >  {/* aspect={2.1}  */}
                         <LineChart data={lineChartData} margin={{ left: 20 }} >
 
                             <Tooltip
