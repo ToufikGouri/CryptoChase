@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import HeroBG from "../assets/HeroBG.jpg"
-import { styled } from "@mui/system"
-// import Slider from "react-slick";
+import { styled, useTheme } from "@mui/system"
 import axios from 'axios'
 import { TrendingCoins } from '../config/api'
 import numberWithCommas from '../config/numberFix'
@@ -9,6 +8,7 @@ import { Link } from 'react-router-dom';
 import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';       // use this in main.jsx if want to use alice throughout the code
 import { useSelector } from 'react-redux'
+import { Typography } from '@mui/material'
 
 const BannerDiv = styled('div')({
     height: 400,
@@ -37,8 +37,26 @@ const CoinDiv = styled('div')({
     filter: "drop-shadow(2px 4px 6px black)"
 })
 
-// give ::before the image background
-//    filter: saturate(0.8);
+
+const Heading = styled(Typography)(({ theme }) => ({
+    fontSize: 80,
+    fontFamily: "Montserrat",
+    fontWeight: 800,
+    [theme.breakpoints.down('sm')]: {
+        fontSize: 45,
+    },
+}))
+
+const SubHeading = styled(Typography)(({ theme }) => ({
+    fontSize: 18,
+    fontFamily: "Montserrat",
+    fontWeight: 800,
+    textAlign: "center",
+    padding: "0 8px",
+    [theme.breakpoints.down('sm')]: {
+        fontSize: 14,
+    },
+}))
 
 
 // Main component starts here
@@ -46,6 +64,7 @@ const Banner = () => {
 
     const [trending, setTrending] = useState([])
     const { currency, symbol } = useSelector(state => state.cryptoReducer)
+    const theme = useTheme()
 
     const getTrendingCoins = async () => {
         const { data } = await axios.get(TrendingCoins(currency))
@@ -57,7 +76,10 @@ const Banner = () => {
             items: 2,
         },
         512: {
-            items: 4,
+            items: 3,
+        },
+        768: {
+            items: 4
         }
     }
 
@@ -90,8 +112,8 @@ const Banner = () => {
         <>
             <BannerDiv>
 
-                <h1 style={{ fontSize: 80 }} className='specialText' >Crypto Chase </h1>
-                <h3 className='specialText'>Get all the info regarding your favorite crypto currency</h3>
+                <Heading className='specialText' >Crypto Chase </Heading>
+                <SubHeading className='specialText'>Get all the info regarding your favorite crypto currency</SubHeading>
 
                 <CarouselMain >
                     <AliceCarousel

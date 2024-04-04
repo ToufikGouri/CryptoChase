@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { LinearProgress, Pagination, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
-import { styled } from '@mui/system'
+import { styled, useTheme } from '@mui/system'
 import axios from 'axios'
 import { CoinList } from '../config/api'
 import numberWithCommas from '../config/numberFix'
@@ -20,14 +20,25 @@ const TableRowOfBody = styled(TableRow)({
     "&:hover": {
         backgroundColor: "#131111"
     },
-    fontFamily: "Montserrat"
+    fontFamily: "Montserrat",
 })
 
-const StyledPagination = styled(Pagination)({
+const TheTableCell = styled(TableCell)(({ theme }) => ({
+    [theme.breakpoints.down('sm')]: {
+        padding: "0px !important",
+        fontSize: 10,
+    }
+    // in inline css another good approach is sx={{ marginRight: theme.breakpoints.down('sm') ? '10px' : 'inherit' }}
+}))
+
+const StyledPagination = styled(Pagination)(({ theme }) => ({
     "& .MuiPaginationItem-root": {
         color: "gold"
+    },
+    [theme.breakpoints.down('sm')]: {
+        padding: "20px 0 !important",
     }
-})
+}))
 
 const CoinsTable = () => {
 
@@ -35,7 +46,9 @@ const CoinsTable = () => {
     const [search, setSearch] = useState("")
     const [coins, setCoins] = useState([])
     const [page, setPage] = useState(1)
+    const [isScreenSm, setisScreenSm] = useState(false)
     const navigate = useNavigate()
+    const theme = useTheme()
 
     const getCoins = async () => {
         const { data } = await axios.get(CoinList(currency))
@@ -48,9 +61,23 @@ const CoinsTable = () => {
             coin.symbol.toLowerCase().includes(search))
     }
 
+
+    // checking if the window width is less than 600
+    const winSize = () => {
+        if (window.innerWidth < 600) {
+            setisScreenSm(true)
+        } else {
+            setisScreenSm(false)
+        }
+    }
+    window.addEventListener('resize', winSize)
+
+
     useEffect(() => {
         getCoins()
+        window.addEventListener('resize', winSize)      // for first render
     }, [])
+
 
     if (coins.length === 0) {
         return <LinearProgress style={{ backgroundColor: "gold" }} />
@@ -59,22 +86,22 @@ const CoinsTable = () => {
     return (
         <>
             <TableWrapper>
-                <Typography variant='h4' style={{ fontFamily: 'Montserrat', margin: 18 }} >Cryptocurrency Prices by Market Cap</Typography>
+                <Typography variant={isScreenSm ? 'h5' : 'h4'} style={{ fontFamily: 'Montserrat', margin: 18, textAlign: 'center' }} >Cryptocurrency Prices by Market Cap</Typography>
                 <TextField
                     label="Search For a Crypto Currency..."
                     variant="outlined"
-                    sx={{ width: "80%", marginBottom: 3 }}
+                    sx={{ width: "80%", marginBottom: 3, '@media (max-width: 600px)': { width: '98%' } }}
                     onChange={(e) => setSearch(e.target.value)}
                 />
 
-                <TableContainer sx={{ width: "80%" }} >
+                <TableContainer sx={{ width: "80%", '@media (max-width: 600px)': { width: '98%' }, }} >
                     <Table>
                         <TableHead style={{ backgroundColor: '#EEBC1D' }} >
                             <TableRow>
                                 {["Coin", "Price", "24h Change", "Market Cap"].map(head => (
                                     <TableCell
                                         key={head}
-                                        sx={{ color: "black", fontFamily: "Montserrat", fontWeight: '700' }}
+                                        sx={{ color: "black", fontFamily: "Montserrat", fontWeight: '700', '@media (max-width: 600px)': { fontSize: "12px", textAlign: 'center' } }}
                                         align={head === "Coin" ? "left" : "right"}
                                     >
                                         {head}
@@ -91,24 +118,24 @@ const CoinsTable = () => {
                                     <TableRowOfBody key={coin.name} onClick={() => navigate(`/coins/${coin.id}`)} >
 
                                         <TableCell align='left' component='th' scope='row' style={{ display: "flex", gap: 15 }} >
-                                            <img src={coin.image} height="50px" alt={coin.name} style={{ marginBottom: 10 }} />
+                                            <img src={coin.image} height="50px" className='tableLogo' alt={coin.name} style={{ marginBottom: 10 }} />
                                             <span>
-                                                <Typography variant='h5' style={{ textTransform: "uppercase" }} >{coin.symbol}</Typography>
-                                                <Typography sx={{ color: "darkgrey" }} >{coin.name}</Typography>
+                                                <Typography sx={{ textTransform: "uppercase", '@media (max-width: 600px)': { fontSize: "14px" }, }} >{coin.symbol}</Typography>
+                                                <Typography sx={{ color: "darkgrey", '@media (max-width: 600px)': { fontSize: '12px' }, }} >{coin.name}</Typography>
                                             </span>
                                         </TableCell>
 
-                                        <TableCell align='right' >
+                                        <TheTableCell align='right'  >
                                             {symbol} {' '} {numberWithCommas(coin.current_price.toFixed(2))}
-                                        </TableCell>
+                                        </TheTableCell>
 
-                                        <TableCell align='right' sx={{ color: profit > 0 ? "rgb(14, 203, 129)" : 'red', fontWeight: 500 }} >
+                                        <TheTableCell align={isScreenSm ? 'center' : 'right'} sx={{ color: profit > 0 ? "rgb(14, 203, 129)" : 'red', fontWeight: 500 }} >
                                             {profit && "+"} {coin.price_change_percentage_24h.toFixed(2)}%
-                                        </TableCell>
+                                        </TheTableCell>
 
-                                        <TableCell align='right' >
+                                        <TheTableCell align={isScreenSm ? 'center' : 'right'} >
                                             {symbol} {" "} {numberWithCommas(coin.market_cap.toString().slice(0, -6))}M
-                                        </TableCell>
+                                        </TheTableCell>
 
                                     </TableRowOfBody>
                                 )
