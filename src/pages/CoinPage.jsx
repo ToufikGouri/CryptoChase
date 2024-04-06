@@ -4,20 +4,34 @@ import { useParams } from 'react-router-dom'
 import { SingleCoin } from '../config/api'
 import { useSelector } from 'react-redux'
 import CoinInfo from '../components/CoinInfo'
-import { styled } from '@mui/system'
+import { borderBottom, height, styled, useTheme } from '@mui/system'
 import { LinearProgress, Typography } from '@mui/material'
 import HTMLReactParser from 'html-react-parser'
 import numberWithCommas from '../config/numberFix'
 
 
-const SideBar = styled('div')({
+const AllContainer = styled('div')(({ theme }) => ({
+    display: "flex",
+    [theme.breakpoints.down("md")]: {
+        flexDirection: "column",
+        alignItems: "center",
+    },
+}))
+
+
+const SideBar = styled('div')(({ theme }) => ({
     width: "30%",
     marginTop: 25,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flexDirection: "column"
-})
+    flexDirection: "column",
+    borderRight: "2px solid grey",
+    [theme.breakpoints.down("md")]: {
+        width: "100%",
+        borderRight: "none"
+    }
+}))
 
 const Heading = styled(Typography)({
     fontWeight: "bold",
@@ -34,16 +48,27 @@ const Description = styled(Typography)({
     textAlign: "justify",
 })
 
-const MarketData = styled('div')({
+const MarketData = styled('div')(({ theme }) => ({
     alignSelf: "start",
     padding: 25,
     paddingTop: 10,
     width: "100%",
-})
+    [theme.breakpoints.down("md")]: { 
+        display: "flex",
+        justifyContent: "space-around",
+    },
+    [theme.breakpoints.down("xs")]: {
+        alignItems: "start",
+    },
+    [theme.breakpoints.down("sm")]: {
+        flexDirection: "column",
+        alignItems: "start",
+    },
+}))
 
 
 
-const InfoContainer = styled('div')({
+const InfoContainer = styled('div')(({ theme }) => ({
     width: "70%",
     display: 'flex',
     justifyContent: 'center',
@@ -51,13 +76,19 @@ const InfoContainer = styled('div')({
     flexDirection: 'column',
     marginTop: 25,
     padding: 40,
-})
+    [theme.breakpoints.down("md")]: {
+        width: "100%",
+        padding: 20,
+        paddingTop: 0, 
+    },
+}))
 
 const CoinPage = () => {
 
     const { id } = useParams()
     const { currency, symbol } = useSelector(state => state.cryptoReducer)
     const [coin, setcoin] = useState()
+    const theme = useTheme()
 
     const getCoin = async () => {
         const { data } = await axios.get(SingleCoin(id))
@@ -73,7 +104,7 @@ const CoinPage = () => {
             {!coin ?
                 (<LinearProgress style={{ backgroundColor: "gold" }} />) :
                 (
-                    <div style={{ display: "flex" }}>
+                    <AllContainer>
 
                         {/* SIDEBAR */}
                         {coin && <SideBar>
@@ -125,7 +156,7 @@ const CoinPage = () => {
                         <InfoContainer>
                             <CoinInfo coin={coin} />
                         </InfoContainer>
-                    </div>
+                    </AllContainer>
                 )
             }
         </>

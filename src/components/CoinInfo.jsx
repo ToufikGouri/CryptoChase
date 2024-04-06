@@ -50,11 +50,11 @@ const CoinInfo = ({ coin }) => {
 
     return (
         <>
-            {!coin ?
+            {!coinInfo ?
                 (<h1>Loading...</h1>) :
 
                 (<MainContainer>
-                    <ResponsiveContainer width="100%" height="100%" aspect={3}  >  {/* aspect={2.1}  */}
+                    <ResponsiveContainer width="100%" height="100%" aspect={2.1}  >  {/* aspect={2.1} or 3 */}
                         <LineChart data={lineChartData} margin={{ left: 20 }} >
 
                             <Tooltip
