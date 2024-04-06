@@ -53,7 +53,7 @@ const MarketData = styled('div')(({ theme }) => ({
     padding: 25,
     paddingTop: 10,
     width: "100%",
-    [theme.breakpoints.down("md")]: { 
+    [theme.breakpoints.down("md")]: {
         display: "flex",
         justifyContent: "space-around",
     },
@@ -79,7 +79,7 @@ const InfoContainer = styled('div')(({ theme }) => ({
     [theme.breakpoints.down("md")]: {
         width: "100%",
         padding: 20,
-        paddingTop: 0, 
+        paddingTop: 0,
     },
 }))
 
@@ -95,8 +95,14 @@ const CoinPage = () => {
         setcoin(data)
     }
 
+    document.title = `${coin?.name || id.toUpperCase()} | Crypto Chase`
+
     useEffect(() => {
         getCoin()
+
+        return () => {
+            document.title = 'Crypto Chase'
+        }
     }, [currency])
 
     return (

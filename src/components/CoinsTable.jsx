@@ -76,6 +76,10 @@ const CoinsTable = () => {
     useEffect(() => {
         getCoins()
         window.addEventListener('resize', winSize)      // for first render
+
+        return () => {
+            window.removeEventListener('resize', winSize);
+        };
     }, [])
 
 

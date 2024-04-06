@@ -36,11 +36,7 @@ const CoinInfo = ({ coin }) => {
 
     useEffect(() => {
         getHistoricalData()
-    }, [currency, days])
-
-    if (!coinInfo.length === 0) {
-        return <CircularProgress style={{ color: "gold" }} size={250} thickness={1} />
-    }
+    }, [currency, days]) 
 
 
     // ReChart Configuration 
@@ -50,8 +46,8 @@ const CoinInfo = ({ coin }) => {
 
     return (
         <>
-            {!coinInfo ?
-                (<h1>Loading...</h1>) :
+            {coinInfo.length === 0 ?
+                (<CircularProgress style={{ color: "gold" }} size={250} thickness={1} />) :
 
                 (<MainContainer>
                     <ResponsiveContainer width="100%" height="100%" aspect={2.1}  >  {/* aspect={2.1} or 3 */}
